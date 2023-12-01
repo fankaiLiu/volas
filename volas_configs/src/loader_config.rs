@@ -68,8 +68,8 @@ mod tests {
         address = "0.0.0.0:5800"
         ssl = false
         cors_allow_origin=["https://salvo.rs"]
-        [database]
-        database_url="file:data/test.db"
+        [database.database_urls]
+        test="file:data/test.db"
         [jwt]
         jwt_secret = "secret"
         jwt_exp = 6000
