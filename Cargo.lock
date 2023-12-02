@@ -2238,6 +2238,11 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 [[package]]
 name = "volas_bin"
 version = "0.1.0"
+dependencies = [
+ "tokio",
+ "volas_configs",
+ "volas_infra",
+]
 
 [[package]]
 name = "volas_configs"
@@ -2252,6 +2257,7 @@ dependencies = [
 name = "volas_infra"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "sea-orm",
  "tokio",
  "volas_configs",

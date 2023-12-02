@@ -11,3 +11,7 @@ description.workspace = true
 sea-orm = { workspace = true }
 configs = { package = "volas_configs", path = "../volas_configs" }
 tokio={workspace=true}
+async-trait={workspace=true}
+[features]
+default = ["postgres"]
+postgres = ["sea-orm/sqlx-postgres"]

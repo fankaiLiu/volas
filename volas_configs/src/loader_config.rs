@@ -32,12 +32,14 @@ impl ConfigBuilder {
     }
 }
 
-
 impl Configs {
     pub fn init(config_file: String) -> Self {
         let mut file = match File::open(&config_file) {
             Ok(f) => f,
-            Err(e) => panic!("Config file does not exist:{}, Error message:{}", CONFIG_FILE, e),
+            Err(e) => panic!(
+                "Config file does not exist:{}, Error message:{}",
+                CONFIG_FILE, e
+            ),
         };
         let mut cfg_contents = String::new();
         match file.read_to_string(&mut cfg_contents) {
@@ -62,7 +64,9 @@ mod tests {
     fn test_init() {
         let config_file = "test_config.toml";
         let mut file = File::create(&config_file).unwrap();
-        write!(file, r#"
+        write!(
+            file,
+            r#"
         [server]
         name = "volas"
         address = "0.0.0.0:5800"
@@ -83,7 +87,9 @@ mod tests {
         directory = "./logs"
         file_name = "my-service.log"
         rolling = "daily"
-        "#).unwrap();
+        "#
+        )
+        .unwrap();
 
         let configs = Configs::init(config_file.to_string());
         assert_eq!(configs.server.name, "volas");

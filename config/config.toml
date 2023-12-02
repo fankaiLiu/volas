@@ -4,7 +4,7 @@ address = "0.0.0.0:5800"
 ssl = false
 cors_allow_origin = ["https://salvo.rs"]
 [database.database_urls]
-test = "file:data/test.db"
+system = "postgres://liufankai:1@localhost:5432/volas_system"
 [jwt]
 jwt_secret = "secret"
 jwt_exp = 6000
