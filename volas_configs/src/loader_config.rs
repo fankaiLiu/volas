@@ -72,8 +72,15 @@ mod tests {
         address = "0.0.0.0:5800"
         ssl = false
         cors_allow_origin=["https://salvo.rs"]
-        [database.database_urls]
-        test="file:data/test.db"
+        [database]
+        [[database.configs]]
+        name = "system"
+        url = "postgres://liufankai:1@localhost:5432/volas_system"
+        max_connections = 1000
+        min_connections = 5
+        connect_timeout = 8
+        idle_timeout = 8
+        sqlx_logging = false        
         [jwt]
         jwt_secret = "secret"
         jwt_exp = 6000

@@ -31,20 +31,19 @@ impl DatabaseService for DatabaseServiceImpl {
     }
 
     async fn init_db_conn(&mut self) {
-        for (name, url) in CFG.database.database_urls.iter() {
-            let mut opt = ConnectOptions::new(url.to_owned());
-            opt.max_connections(1000)
-                .min_connections(5)
-                .connect_timeout(Duration::from_secs(8))
-                .idle_timeout(Duration::from_secs(8))
-                .sqlx_logging(false);
-
-            let db = Database::connect(opt)
-                .await
-                .expect("Database connection failure");
-            self.db.insert(name.clone(), db);
-        }
-    }
+		for config in CFG.database.configs.iter() {
+			let mut opt = ConnectOptions::new(config.url.to_owned());
+			opt.max_connections(config.max_connections)
+				.min_connections(config.min_connections)
+				.connect_timeout(Duration::from_secs(config.connect_timeout))
+				.idle_timeout(Duration::from_secs(config.idle_timeout))
+				.sqlx_logging(config.sqlx_logging);
+		
+			let db = Database::connect(opt)
+				.await
+				.expect("Database connection failure");
+			self.db.insert(config.name.clone(), db);
+		}    }
 
     fn get_db_conn<T: Into<String>>(&self, name: T) -> Option<&DatabaseConnection> {
         self.db.get(&name.into())
