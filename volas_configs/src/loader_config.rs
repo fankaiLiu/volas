@@ -1,5 +1,5 @@
 use once_cell::sync::Lazy;
-use std::{fs::File, io::Read};
+use std::{env, fs::File, io::Read};
 
 use crate::{
     config_cert::{get_cert_key, CertKey},
@@ -8,29 +8,12 @@ use crate::{
 
 const CONFIG_FILE: &str = "config/config.toml";
 
-pub static CFG: Lazy<Configs> = Lazy::new(|| Configs::init(CONFIG_FILE.to_string()));
+pub static CFG: Lazy<Configs> = Lazy::new(|| {
+    let args: Vec<String> = env::args().collect();
+    let config_file = args.get(1).unwrap_or(&CONFIG_FILE.to_string()).clone();
+    Configs::init(config_file)
+});
 pub static CERT_KEY: Lazy<CertKey> = Lazy::new(get_cert_key);
-
-pub struct ConfigBuilder {
-    config_file: String,
-}
-
-impl ConfigBuilder {
-    pub fn new() -> Self {
-        Self {
-            config_file: String::from("config/config.toml"),
-        }
-    }
-
-    pub fn config_file(mut self, config_file: String) -> Self {
-        self.config_file = config_file;
-        self
-    }
-
-    pub fn build(self) -> Configs {
-        Configs::init(self.config_file)
-    }
-}
 
 impl Configs {
     fn init(config_file: String) -> Self {

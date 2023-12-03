@@ -1,8 +1,11 @@
+use crate::error::InfraError;
 use async_trait::async_trait;
 use configs::CFG;
 use sea_orm::{entity::prelude::DatabaseConnection, ConnectOptions, Database};
 use std::{collections::HashMap, time::Duration};
 use tokio::sync::OnceCell;
+
+use super::error::Result;
 pub static DATABASE_SERVICE: OnceCell<DatabaseServiceImpl> = OnceCell::const_new();
 
 pub async fn init_db_conn() {
@@ -23,7 +26,7 @@ pub struct DatabaseServiceImpl {
 pub trait DatabaseService {
     fn new() -> Self;
     async fn init_db_conn(&mut self);
-    fn get_db_conn<T: Into<String>>(&self, name: T) -> Option<&DatabaseConnection>;
+    fn get_db_conn<T: Into<String>>(&self, name: T) -> Result<&DatabaseConnection>;
 }
 #[async_trait]
 impl DatabaseService for DatabaseServiceImpl {
@@ -47,7 +50,11 @@ impl DatabaseService for DatabaseServiceImpl {
         }
     }
 
-    fn get_db_conn<T: Into<String>>(&self, name: T) -> Option<&DatabaseConnection> {
-        self.db.get(&name.into())
+    fn get_db_conn<T: Into<String>>(&self, name: T) -> Result<&DatabaseConnection> {
+        let name: String = name.into();
+        match self.db.get(&name.clone()) {
+            Some(db) => Ok(db),
+            None => Err(InfraError::ConfigNotExist(name.into())),
+        }
     }
 }

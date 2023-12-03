@@ -2259,6 +2259,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "sea-orm",
+ "thiserror",
  "tokio",
  "volas_configs",
 ]
