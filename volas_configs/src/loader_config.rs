@@ -33,7 +33,7 @@ impl ConfigBuilder {
 }
 
 impl Configs {
-    pub fn init(config_file: String) -> Self {
+    fn init(config_file: String) -> Self {
         let mut file = match File::open(&config_file) {
             Ok(f) => f,
             Err(e) => panic!(
