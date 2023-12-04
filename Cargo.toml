@@ -3,7 +3,9 @@ resolver = "2"
 members = [
   "volas_configs",
   "volas_infra",
-  "volas_bin"
+  "volas_bin",
+  "volas_web",
+  "volas_utils"
 ]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [profile.release]
@@ -39,3 +41,4 @@ tracing = "0.1"
 uuid = { version = "1.4.1", features = ["v4", "fast-rng", "macro-diagnostics"] }
 validator = { version = "0.16", features = ["derive"] }
 sea-orm = {version = "0", features = ["macros", "runtime-tokio-native-tls","with-chrono"]}
+sysinfo = "0.29.11"
