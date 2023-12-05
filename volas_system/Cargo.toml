@@ -1,0 +1,13 @@
+[package]
+name = "volas_system"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+web = { package = "volas_web", path = "../volas_web" }
+utils = { package = "volas_utils", path = "../volas_utils" }
+salvo = { workspace = true }

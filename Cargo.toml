@@ -5,6 +5,7 @@ members = [
   "volas_infra",
   "volas_bin",
   "volas_web",
+  "volas_system",
   "volas_utils"
 ]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

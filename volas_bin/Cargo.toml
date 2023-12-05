@@ -9,6 +9,9 @@ description.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tokio={workspace=true}
+tokio = { workspace = true }
+salvo = { workspace = true }
 configs = { package = "volas_configs", path = "../volas_configs" }
 infra = { package = "volas_infra", path = "../volas_infra" }
+system = {package = "volas_system", path = "../volas_system" }
+web = {package = "volas_web", path = "../volas_web" }

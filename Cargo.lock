@@ -3485,9 +3485,12 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 name = "volas_bin"
 version = "0.1.0"
 dependencies = [
+ "salvo",
  "tokio",
  "volas_configs",
  "volas_infra",
+ "volas_system",
+ "volas_web",
 ]
 
 [[package]]
@@ -3508,6 +3511,15 @@ dependencies = [
  "thiserror",
  "tokio",
  "volas_configs",
+]
+
+[[package]]
+name = "volas_system"
+version = "0.1.0"
+dependencies = [
+ "salvo",
+ "volas_utils",
+ "volas_web",
 ]
 
 [[package]]
