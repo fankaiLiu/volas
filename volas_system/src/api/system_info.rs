@@ -11,6 +11,6 @@ pub struct SystemInfo;
 
 impl Routers for SystemInfo {
     fn build(self) -> Vec<salvo::Router> {
-        vec![Router::new().path("info").get(system_info)]
+        vec![Router::new().path("info").get(system_info).options(handler::empty())]
     }
 }
