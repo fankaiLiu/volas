@@ -79,6 +79,7 @@ impl ErrorResponseBuilder {
         let (code, msg) = match &err {
             AppError::AnyHow(e) => (500, e.to_string()),
             AppError::ParseError(e) => (400, e.to_string()),
+            AppError::ExternalError(e) => (500, e.to_string()),
         };
         Self {
             code,
@@ -98,6 +99,7 @@ impl ErrorResponseBuilder {
         let status_code = match self.source_error {
             AppError::AnyHow(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::ParseError(_) => StatusCode::BAD_REQUEST,
+            AppError::ExternalError(_) => StatusCode::INTERNAL_SERVER_ERROR,
         };
         res.stuff(status_code, Json(self));
     }
