@@ -1,6 +1,5 @@
+use common::Routers;
 use salvo::Router;
-use web::Routers;
-
 pub mod system_info;
 
 pub struct System;

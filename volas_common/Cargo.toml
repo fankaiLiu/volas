@@ -1,5 +1,5 @@
 [package]
-name = "volas_web"
+name = "volas_common"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -8,4 +8,7 @@ description.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+thiserror = { workspace = true }
+anyhow = { workspace = true }
 salvo = { workspace = true }
+serde ={workspace = true}

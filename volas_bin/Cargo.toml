@@ -14,4 +14,4 @@ salvo = { workspace = true }
 configs = { package = "volas_configs", path = "../volas_configs" }
 infra = { package = "volas_infra", path = "../volas_infra" }
 system = {package = "volas_system", path = "../volas_system" }
-web = {package = "volas_web", path = "../volas_web" }
+common = {package = "volas_common", path = "../volas_common" }

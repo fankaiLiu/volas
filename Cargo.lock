@@ -3487,10 +3487,20 @@ version = "0.1.0"
 dependencies = [
  "salvo",
  "tokio",
+ "volas_common",
  "volas_configs",
  "volas_infra",
  "volas_system",
- "volas_web",
+]
+
+[[package]]
+name = "volas_common"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "salvo",
+ "serde",
+ "thiserror",
 ]
 
 [[package]]
@@ -3518,8 +3528,8 @@ name = "volas_system"
 version = "0.1.0"
 dependencies = [
  "salvo",
+ "volas_common",
  "volas_utils",
- "volas_web",
 ]
 
 [[package]]
@@ -3529,13 +3539,6 @@ dependencies = [
  "once_cell",
  "serde",
  "sysinfo",
-]
-
-[[package]]
-name = "volas_web"
-version = "0.1.0"
-dependencies = [
- "salvo",
 ]
 
 [[package]]

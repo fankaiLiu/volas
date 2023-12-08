@@ -2,9 +2,9 @@
 resolver = "2"
 members = [
   "volas_configs",
+  "volas_common",
   "volas_infra",
   "volas_bin",
-  "volas_web",
   "volas_system",
   "volas_utils"
 ]

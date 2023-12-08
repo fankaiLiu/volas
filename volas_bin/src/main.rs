@@ -1,3 +1,4 @@
+use common::Routers;
 use configs::CFG;
 use infra::init_db_conn;
 use salvo::{
@@ -7,7 +8,6 @@ use salvo::{
 };
 use system::System;
 use tokio::sync::oneshot;
-use web::Routers;
 
 #[tokio::main]
 async fn main() {
