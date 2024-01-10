@@ -1,9 +1,10 @@
 use once_cell::sync::OnceCell;
+use salvo::oapi::ToSchema;
 use serde::Serialize;
 use std::sync::Mutex;
 use sysinfo::{ComponentExt, ProcessExt, System, SystemExt};
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Default, Serialize, ToSchema)]
 pub struct SystemInfo {
     system_name: Option<String>,
     kernel_version: Option<String>,
@@ -15,13 +16,13 @@ pub struct SystemInfo {
     percent_memory_used: f64,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, ToSchema)]
 pub struct ComponentInfo {
     name: String,
     temperature: f32,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Default, Serialize, ToSchema)]
 pub struct MemoryInfo {
     total_memory: u64,
     used_memory: u64,
@@ -54,13 +55,11 @@ impl SystemInfo {
             total_swap: sys.total_swap(),
             used_swap: sys.used_swap(),
         };
-        // Before iterating over processes, gather total memory info
+
         let total_memory = sys.total_memory();
 
-        // Gather the sum of memory used by all processes
         let total_process_memory: u64 = sys.processes().values().map(|p| p.memory()).sum();
 
-        // Calculate the percentage
         let percent_memory_used =
             ((total_process_memory as f64 / total_memory as f64) * 10000.0).round() / 100.0;
         Self {

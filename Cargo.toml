@@ -7,7 +7,7 @@ members = [
   "volas_bin",
   "volas_system",
   "volas_utils"
-]
+, "volas_migrations"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [profile.release]
 codegen-units = 1 
@@ -41,5 +41,7 @@ toml = "0.8.0"
 tracing = "0.1"
 uuid = { version = "1.4.1", features = ["v4", "fast-rng", "macro-diagnostics"] }
 validator = { version = "0.16", features = ["derive"] }
-sea-orm = {version = "0", features = ["macros", "runtime-tokio-native-tls","with-chrono"]}
 sysinfo = "0.29.11"
+surrealdb = "1.0.2"
+surrealdb-migrator = {version ="0.1.7",features = ["from-directory"]}
+include_dir = "0.7.3"

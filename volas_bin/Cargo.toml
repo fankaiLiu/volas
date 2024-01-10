@@ -15,3 +15,4 @@ configs = { package = "volas_configs", path = "../volas_configs" }
 infra = { package = "volas_infra", path = "../volas_infra" }
 system = {package = "volas_system", path = "../volas_system" }
 common = {package = "volas_common", path = "../volas_common" }
+migrations = {package = "volas_migrations", path = "../volas_migrations" }

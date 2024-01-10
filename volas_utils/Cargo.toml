@@ -11,3 +11,4 @@ description.workspace = true
 sysinfo = { workspace = true }
 once_cell = {workspace = true}
 serde = {workspace = true}
+salvo = { workspace = true }

@@ -8,11 +8,8 @@ description.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sea-orm = { workspace = true }
 configs = { package = "volas_configs", path = "../volas_configs" }
 tokio={workspace=true}
 thiserror={workspace=true}
 async-trait={workspace=true}
-[features]
-default = ["postgres"]
-postgres = ["sea-orm/sqlx-postgres"]
+surrealdb = {workspace=true}

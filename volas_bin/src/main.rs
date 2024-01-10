@@ -1,6 +1,7 @@
 use common::Routers;
 use configs::CFG;
-use infra::init_db_conn;
+use infra::{init_db_conn, DATABASE_SERVICE};
+use migrations::run_migrations;
 use salvo::{
     conn::TcpListener,
     cors::{self, AllowHeaders, AllowMethods, Cors},
@@ -13,6 +14,7 @@ use tokio::sync::oneshot;
 async fn main() {
     dbg!(&CFG.server.name);
     init_db_conn().await;
+    run_migrations(DATABASE_SERVICE.get().unwrap()).await;
     let cors_handler = Cors::new()
         .allow_origin(cors::Any)
         .allow_methods(AllowMethods::any())

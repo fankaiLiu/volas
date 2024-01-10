@@ -1,60 +1,26 @@
-use crate::error::InfraError;
-use async_trait::async_trait;
-use configs::CFG;
-use sea_orm::{entity::prelude::DatabaseConnection, ConnectOptions, Database};
-use std::{collections::HashMap, time::Duration};
+use surrealdb::{engine::remote::ws::Ws, opt::auth::Root, Surreal};
 use tokio::sync::OnceCell;
 
-use super::error::Result;
-pub static DATABASE_SERVICE: OnceCell<DatabaseServiceImpl> = OnceCell::const_new();
+pub static DATABASE_SERVICE: OnceCell<Surreal<surrealdb::engine::remote::ws::Client>> =
+    OnceCell::const_new();
 
 pub async fn init_db_conn() {
     DATABASE_SERVICE
         .get_or_init(|| async {
-            let mut db_service = DatabaseServiceImpl::new();
-            db_service.init_db_conn().await;
-            db_service
+            let db = Surreal::new::<Ws>("127.0.0.1:8000")
+                .await
+                .expect("db is not available");
+            db.signin(Root {
+                username: "root",
+                password: "root",
+            })
+            .await
+            .expect("db is not available");
+            db.use_ns("test")
+                .use_db("test")
+                .await
+                .expect("use_ns or use db erroe");
+            db
         })
         .await;
-}
-
-pub struct DatabaseServiceImpl {
-    db: HashMap<String, DatabaseConnection>,
-}
-
-#[async_trait]
-pub trait DatabaseService {
-    fn new() -> Self;
-    async fn init_db_conn(&mut self);
-    fn get_db_conn<T: Into<String>>(&self, name: T) -> Result<&DatabaseConnection>;
-}
-#[async_trait]
-impl DatabaseService for DatabaseServiceImpl {
-    fn new() -> Self {
-        Self { db: HashMap::new() }
-    }
-
-    async fn init_db_conn(&mut self) {
-        for config in CFG.database.configs.iter() {
-            let mut opt = ConnectOptions::new(config.url.to_owned());
-            opt.max_connections(config.max_connections)
-                .min_connections(config.min_connections)
-                .connect_timeout(Duration::from_secs(config.connect_timeout))
-                .idle_timeout(Duration::from_secs(config.idle_timeout))
-                .sqlx_logging(config.sqlx_logging);
-
-            let db = Database::connect(opt)
-                .await
-                .expect("Database connection failure");
-            self.db.insert(config.name.clone(), db);
-        }
-    }
-
-    fn get_db_conn<T: Into<String>>(&self, name: T) -> Result<&DatabaseConnection> {
-        let name: String = name.into();
-        match self.db.get(&name.clone()) {
-            Some(db) => Ok(db),
-            None => Err(InfraError::ConfigNotExist(name.into())),
-        }
-    }
 }

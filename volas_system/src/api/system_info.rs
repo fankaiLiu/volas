@@ -1,9 +1,9 @@
-use common::Routers;
-use salvo::{handler, writing::Json, Router};
+use common::{app_response::ResponseBuilder, Routers};
+use salvo::{handler, Response, Router};
 #[handler]
-async fn system_info() -> Json<utils::sysinfo::SystemInfo> {
+async fn system_info(res: &mut Response) {
     let sys = utils::sysinfo::SystemInfo::gather();
-    Json(sys)
+    ResponseBuilder::with_data(sys).into_response(res);
 }
 
 pub struct SystemInfo;

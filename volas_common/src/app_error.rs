@@ -7,5 +7,5 @@ pub enum AppError {
     #[error("http::ParseError:`{0}`")]
     Parse(#[from] salvo::http::ParseError),
     #[error("external error: `{0}`")]
-    External(#[from] Box<dyn std::error::Error + Send+ Sync>),
+    External(#[from] Box<dyn std::error::Error + Send + Sync>),
 }
