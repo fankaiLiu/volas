@@ -1,3 +1,4 @@
+use configs::CFG;
 use surrealdb::{engine::remote::ws::Ws, opt::auth::Root, Surreal};
 use tokio::sync::OnceCell;
 
@@ -11,13 +12,13 @@ pub async fn init_db_conn() {
                 .await
                 .expect("db is not available");
             db.signin(Root {
-                username: "root",
-                password: "root",
+                username: &CFG.surrealdb.username,
+                password:  &CFG.surrealdb.password,
             })
             .await
             .expect("db is not available");
-            db.use_ns("test")
-                .use_db("test")
+            db.use_ns( &CFG.surrealdb.ns)
+                .use_db( &CFG.surrealdb.db)
                 .await
                 .expect("use_ns or use db erroe");
             db
