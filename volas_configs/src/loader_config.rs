@@ -50,33 +50,29 @@ mod tests {
         write!(
             file,
             r#"
-        [server]
-        name = "volas"
-        address = "0.0.0.0:5800"
-        ssl = false
-        cors_allow_origin=["https://salvo.rs"]
-        [database]
-        [[database.configs]]
-        name = "system"
-        url = "postgres://liufankai:1@localhost:5432/volas_system"
-        max_connections = 1000
-        min_connections = 5
-        connect_timeout = 8
-        idle_timeout = 8
-        sqlx_logging = false        
-        [jwt]
-        jwt_secret = "secret"
-        jwt_exp = 6000
-        [cert]
-        cert = "config/certs/cert.pem"
-        key = "config/certs/key.pem"
-        [log]
-        filter_level = "info"
-        with_ansi = true
-        to_stdout = true
-        directory = "./logs"
-        file_name = "my-service.log"
-        rolling = "daily"
+            [server]
+            name = "volas"
+            address = "0.0.0.0:5800"
+            ssl = false
+            cors_allow_origin = ["https://salvo.rs"]
+            [surrealdb]
+            username="root"
+            password="root"
+            ns="system"
+            db="system"
+            [jwt]
+            jwt_secret = "secret"
+            jwt_exp = 6000
+            [cert]
+            cert = "config/certs/cert.pem"
+            key = "config/certs/key.pem"
+            [log]
+            filter_level = "info"        # "debug" "info" "warn" "error"
+            with_ansi = true
+            to_stdout = true
+            directory = "./logs"
+            file_name = "my-service.log"
+            rolling = "daily"            # "minutely" "hourly" "daily" "never"
         "#
         )
         .unwrap();
