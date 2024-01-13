@@ -7,7 +7,10 @@ use crate::{
 };
 
 const CONFIG_FILE: &str = "config/config.toml";
-
+trait Configurable {
+    fn init(config_file: String) -> Self where Self: Sized;
+    fn config(&self) -> Self where Self: Sized;
+}
 pub static CFG: Lazy<Configs> = Lazy::new(|| {
     let args: Vec<String> = env::args().collect();
     let config_file = args.get(1).unwrap_or(&CONFIG_FILE.to_string()).clone();
@@ -15,24 +18,28 @@ pub static CFG: Lazy<Configs> = Lazy::new(|| {
 });
 pub static CERT_KEY: Lazy<CertKey> = Lazy::new(get_cert_key);
 
-impl Configs {
+impl Configurable for Configs {
     fn init(config_file: String) -> Self {
         let mut file = match File::open(&config_file) {
             Ok(f) => f,
             Err(e) => panic!(
-                "Config file does not exist:{}, Error message:{}",
-                CONFIG_FILE, e
+                "Config file does not exist: {}, Error message: {}",
+                config_file, e
             ),
         };
         let mut cfg_contents = String::new();
         match file.read_to_string(&mut cfg_contents) {
-            Ok(s) => s,
-            Err(e) => panic!("Failed to read the config file, Error message:{}", e),
+            Ok(_) => (),
+            Err(e) => panic!("Failed to read the config file, Error message: {}", e),
         };
         match toml::from_str(&cfg_contents) {
             Ok(c) => c,
-            Err(e) => panic!("Failed to parse the config file, Error message:{}", e),
+            Err(e) => panic!("Failed to parse the config file, Error message: {}", e),
         }
+    }
+
+    fn config(&self) -> Self {
+        todo!() 
     }
 }
 
