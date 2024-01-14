@@ -9,7 +9,7 @@ use crate::{
 const CONFIG_FILE: &str = "config/config.toml";
 trait Configurable {
     fn init(config_file: String) -> Self where Self: Sized;
-    fn config(&self) -> Self where Self: Sized;
+    fn config(&self) ->&Lazy<Self> where Self: Sized;
 }
 pub static CFG: Lazy<Configs> = Lazy::new(|| {
     let args: Vec<String> = env::args().collect();
@@ -38,8 +38,8 @@ impl Configurable for Configs {
         }
     }
 
-    fn config(&self) -> Self {
-        todo!() 
+    fn config(&self) -> &Lazy<Self> {
+        &CFG
     }
 }
 
