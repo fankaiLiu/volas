@@ -8,6 +8,8 @@ description.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+infra = { package = "volas_infra", path = "../volas_infra" }
+
 surrealdb-migrator = {workspace=true}
 include_dir =  {workspace=true}
 surrealdb = {workspace=true}

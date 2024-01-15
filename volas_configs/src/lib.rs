@@ -5,4 +5,5 @@ mod config_log;
 mod config_server;
 mod config_surrealdb;
 pub mod loader_config;
-pub use loader_config::{CERT_KEY, CFG};
+pub use config_configs::Configs;
+pub use loader_config::CERT_KEY;

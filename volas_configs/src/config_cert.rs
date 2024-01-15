@@ -1,13 +1,12 @@
+use crate::loader_config::Configurable;
+use crate::Configs;
 use serde::Deserialize;
+use std::fs;
 use std::path::Path;
-
-use crate::loader_config::CFG;
 
 #[derive(Debug, Deserialize)]
 pub struct Cert {
-    /// cert
     pub cert: String,
-    /// key
     pub key: String,
 }
 
@@ -21,12 +20,37 @@ impl CertKey {
         Self { cert, key }
     }
 }
-pub fn get_cert_key() -> CertKey {
-    let cert = get_string(&CFG.cert.cert);
-    let key = get_string(&CFG.cert.key);
-    CertKey::new(cert, key)
+
+pub trait CertProvider {
+    fn load_certs(&self) -> Result<CertKey, CertError>;
 }
 
-fn get_string<P: AsRef<Path>>(path: P) -> Vec<u8> {
-    std::fs::read(path).expect("读取文件失败")
+#[derive(Debug)]
+pub enum CertError {
+    IoError(std::io::Error),
+}
+
+impl From<std::io::Error> for CertError {
+    fn from(err: std::io::Error) -> Self {
+        CertError::IoError(err)
+    }
+}
+
+impl CertProvider for Configs {
+    fn load_certs(&self) -> Result<CertKey, CertError> {
+        let cert = fs::read(&self.cert.cert)?;
+        let key = fs::read(&self.cert.key)?;
+        Ok(CertKey::new(cert, key))
+    }
+}
+
+fn get_string<P: AsRef<Path>>(path: P) -> Result<Vec<u8>, CertError> {
+    fs::read(path).map_err(CertError::from)
+}
+
+pub fn get_cert_key() -> CertKey {
+    let config = Configs::config();
+    let cert = get_string(&config.cert.cert).expect("Invalid certificate");
+    let key = get_string(&config.cert.key).expect("Invalid certificate");
+    CertKey::new(cert, key)
 }

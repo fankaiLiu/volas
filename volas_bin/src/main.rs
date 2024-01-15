@@ -1,6 +1,6 @@
 use common::Routers;
-use configs::CFG;
-use infra::{init_db_conn, DATABASE_SERVICE};
+use configs::{loader_config::Configurable, Configs};
+use infra::{DbService, SurrealdbServiceImpl};
 use migrations::run_migrations;
 use salvo::{
     conn::TcpListener,
@@ -12,9 +12,11 @@ use tokio::sync::oneshot;
 
 #[tokio::main]
 async fn main() {
-    dbg!(&CFG.server.name);
-    init_db_conn().await;
-    run_migrations(DATABASE_SERVICE.get().unwrap()).await;
+    let config = Configs::config();
+    dbg!(&config.server.name);
+    SurrealdbServiceImpl::init().await.unwrap();
+    let pool=SurrealdbServiceImpl::pool().await.unwrap();
+    run_migrations(pool).await;
     let cors_handler = Cors::new()
         .allow_origin(cors::Any)
         .allow_methods(AllowMethods::any())
@@ -24,9 +26,9 @@ async fn main() {
     let service: Service = Router::with_hoop(cors_handler)
         .append(&mut System.build())
         .into();
-    println!("Starting server at {}", &CFG.server.address);
+    println!("Starting server at {}", &config.server.address);
     let (tx, rx) = oneshot::channel();
-    let acceptor = TcpListener::new(&CFG.server.address).bind().await;
+    let acceptor = TcpListener::new(&config.server.address).bind().await;
     let server = Server::new(acceptor).serve_with_graceful_shutdown(
         service,
         async {

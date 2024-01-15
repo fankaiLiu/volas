@@ -1,4 +1,4 @@
 pub mod db;
 pub mod error;
-pub use db::{init_db_conn, DATABASE_SERVICE};
+pub use db::{DbService, SurrealdbServiceImpl};
 pub use error::InfraError;
