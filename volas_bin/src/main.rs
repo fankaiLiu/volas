@@ -1,7 +1,7 @@
 use common::Routers;
 use configs::{loader_config::Configurable, Configs};
 use infra::{DbService, SurrealdbServiceImpl};
-use migrations::run_migrations;
+use migrations::MigrationService;
 use salvo::{
     conn::TcpListener,
     cors::{self, AllowHeaders, AllowMethods, Cors},
@@ -15,8 +15,7 @@ async fn main() {
     let config = Configs::config();
     dbg!(&config.server.name);
     SurrealdbServiceImpl::init().await.unwrap();
-    let pool=SurrealdbServiceImpl::pool().await.unwrap();
-    run_migrations(pool).await;
+    SurrealdbServiceImpl::run_migrations().await;
     let cors_handler = Cors::new()
         .allow_origin(cors::Any)
         .allow_methods(AllowMethods::any())
