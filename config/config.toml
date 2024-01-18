@@ -4,6 +4,7 @@ address = "0.0.0.0:5800"
 ssl = false
 cors_allow_origin = ["https://salvo.rs"]
 [surrealdb]
+url="127.0.0.1:8080"
 username="root"
 password="root"
 ns="system"

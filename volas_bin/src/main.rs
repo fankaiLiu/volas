@@ -15,7 +15,7 @@ async fn main() {
     let config = Configs::config();
     dbg!(&config.server.name);
     SurrealdbServiceImpl::init().await.unwrap();
-    SurrealdbServiceImpl::run_migrations().await;
+    SurrealdbServiceImpl::run_migrations().await.unwrap();
     let cors_handler = Cors::new()
         .allow_origin(cors::Any)
         .allow_methods(AllowMethods::any())

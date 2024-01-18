@@ -4,8 +4,10 @@ pub type Result<T> = std::result::Result<T, InfraError>;
 
 #[derive(Error, Debug)]
 pub enum InfraError {
-    #[error("database `{0}` config is not exist")]
-    ConfigNotExist(String),
+    #[error("SurrealdbError: `{0}`")]
+    SurrealdbError(#[from] surrealdb::Error),
+    #[error("Database connection not initialized")]
+    DatabaseNotInitialized,
     #[error("unknown infra error")]
     Unknown,
 }

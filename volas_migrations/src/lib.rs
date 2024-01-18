@@ -1,7 +1,7 @@
 use include_dir::{include_dir, Dir};
+use infra::{DbService, SurrealdbServiceImpl};
 use surrealdb::{Connection, Surreal};
 use surrealdb_migrator::{Migrations, M};
-use infra::{DbService, SurrealdbServiceImpl};
 static MIGRATION_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/migrations");
 
 #[derive(Debug)]

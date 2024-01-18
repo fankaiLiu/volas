@@ -14,30 +14,25 @@ pub struct SurrealdbServiceImpl;
 impl DbService<Surreal<surrealdb::engine::remote::ws::Client>> for SurrealdbServiceImpl {
     async fn init() -> error::Result<()> {
         let config = Configs::config();
-        DATABASE_SERVICE
-            .get_or_init(|| async {
-                let db = Surreal::new::<Ws>("127.0.0.1:8000")
-                    .await
-                    .expect("db is not available");
-                db.signin(Root {
-                    username: &config.surrealdb.username,
-                    password: &config.surrealdb.password,
-                })
-                .await
-                .expect("db is not available");
-                db.use_ns(&config.surrealdb.ns)
-                    .use_db(&config.surrealdb.db)
-                    .await
-                    .expect("use_ns or use db erroe");
-                db
-            })
-            .await;
+        let db = Surreal::new::<Ws>(&config.surrealdb.url).await?;
+        db.signin(Root {
+            username: &config.surrealdb.username,
+            password: &config.surrealdb.password,
+        })
+        .await?;
+        db.use_ns(&config.surrealdb.ns)
+            .use_db(&config.surrealdb.db)
+            .await?;
+        DATABASE_SERVICE.get_or_init(|| async { db }).await;
         Ok(())
     }
 
     async fn pool() -> error::Result<&'static Surreal<surrealdb::engine::remote::ws::Client>> {
-        let pool = DATABASE_SERVICE.get().unwrap();
-        Ok(pool)
+        let pool = DATABASE_SERVICE.get();
+        match pool {
+            Some(pool) => Ok(pool),
+            None => Err(error::InfraError::DatabaseNotInitialized.into()),
+        }
     }
 }
 
