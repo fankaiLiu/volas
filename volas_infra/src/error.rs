@@ -8,6 +8,4 @@ pub enum InfraError {
     SurrealdbError(#[from] surrealdb::Error),
     #[error("Database connection not initialized")]
     DatabaseNotInitialized,
-    #[error("unknown infra error")]
-    Unknown,
 }

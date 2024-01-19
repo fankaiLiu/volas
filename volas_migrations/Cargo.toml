@@ -9,7 +9,7 @@ description.workspace = true
 
 [dependencies]
 infra = { package = "volas_infra", path = "../volas_infra" }
-
+thiserror={workspace=true}
 surrealdb-migrator = {workspace=true}
 include_dir =  {workspace=true}
 surrealdb = {workspace=true}

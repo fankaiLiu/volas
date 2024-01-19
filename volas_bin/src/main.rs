@@ -3,12 +3,10 @@ use configs::{loader_config::Configurable, Configs};
 use infra::{DbService, SurrealdbServiceImpl};
 use migrations::MigrationService;
 use salvo::{
-    conn::TcpListener,
-    cors::{self, AllowHeaders, AllowMethods, Cors},
-    Listener, Router, Server, Service,
+    conn::TcpListener, cors::{self, AllowHeaders, AllowMethods, Cors}, server::ServerHandle, Listener, Router, Server, Service
 };
 use system::System;
-use tokio::sync::oneshot;
+use tokio::{signal, sync::oneshot};
 
 #[tokio::main]
 async fn main() {
@@ -26,16 +24,36 @@ async fn main() {
         .append(&mut System.build())
         .into();
     println!("Starting server at {}", &config.server.address);
-    let (tx, rx) = oneshot::channel();
     let acceptor = TcpListener::new(&config.server.address).bind().await;
-    let server = Server::new(acceptor).serve_with_graceful_shutdown(
-        service,
-        async {
-            rx.await.ok();
-        },
-        None,
-    );
-    tokio::task::spawn(server);
-    tokio::signal::ctrl_c().await.unwrap();
-    let _ = tx.send(());
+    let server = Server::new(acceptor);
+    let handle = server.handle();
+        // Graceful shutdown the server
+        tokio::spawn(shutdown_signal(handle));
+        server.serve(service).await;
+        
+}
+
+async fn shutdown_signal(handle: ServerHandle) {
+    let ctrl_c = async {
+        signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        signal::unix::signal(signal::unix::SignalKind::terminate())
+            .expect("failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        _ = ctrl_c => println!("ctrl_c signal received"),
+        _ = terminate => println!("terminate signal received"),
+    }
+    handle.stop_graceful(std::time::Duration::from_secs(5));
 }
