@@ -12,3 +12,4 @@ common = { package = "volas_common", path = "../volas_common" }
 utils = { package = "volas_utils", path = "../volas_utils" }
 salvo = { workspace = true }
 anyhow = { workspace = true }
+serde = { workspace = true }

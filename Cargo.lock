@@ -4355,6 +4355,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "salvo",
+ "serde",
  "volas_common",
  "volas_utils",
 ]
