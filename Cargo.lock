@@ -4356,7 +4356,9 @@ dependencies = [
  "anyhow",
  "salvo",
  "serde",
+ "surrealdb",
  "volas_common",
+ "volas_infra",
  "volas_utils",
 ]
 

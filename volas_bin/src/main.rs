@@ -3,7 +3,10 @@ use configs::{loader_config::Configurable, Configs};
 use infra::{DbService, SurrealdbServiceImpl};
 use migrations::MigrationService;
 use salvo::{
-    conn::TcpListener, cors::{self, AllowHeaders, AllowMethods, Cors}, server::ServerHandle, Listener, Router, Server, Service
+    conn::TcpListener,
+    cors::{self, AllowHeaders, AllowMethods, Cors},
+    server::ServerHandle,
+    Listener, Router, Server, Service,
 };
 use system::System;
 use tokio::{signal, sync::oneshot};
@@ -27,10 +30,9 @@ async fn main() {
     let acceptor = TcpListener::new(&config.server.address).bind().await;
     let server = Server::new(acceptor);
     let handle = server.handle();
-        // Graceful shutdown the server
-        tokio::spawn(shutdown_signal(handle));
-        server.serve(service).await;
-        
+    // Graceful shutdown the server
+    tokio::spawn(shutdown_signal(handle));
+    server.serve(service).await;
 }
 
 async fn shutdown_signal(handle: ServerHandle) {

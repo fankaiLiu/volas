@@ -10,6 +10,8 @@ description.workspace = true
 [dependencies]
 common = { package = "volas_common", path = "../volas_common" }
 utils = { package = "volas_utils", path = "../volas_utils" }
+infra = { package = "volas_infra", path = "../volas_infra" }
 salvo = { workspace = true }
 anyhow = { workspace = true }
 serde = { workspace = true }
+surrealdb = {workspace=true}
