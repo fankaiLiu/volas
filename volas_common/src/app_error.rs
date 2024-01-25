@@ -9,3 +9,8 @@ pub enum AppError {
     #[error("external error: `{0}`")]
     External(#[from] Box<dyn std::error::Error + Send + Sync>),
 }
+impl Default for AppError {
+    fn default() -> Self {
+        AppError::AnyHow(anyhow::anyhow!("default error"))
+    }
+}

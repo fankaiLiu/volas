@@ -4,7 +4,7 @@ use salvo::oapi::{Object, Schema, ToSchema};
 use serde::{Deserialize, Serialize};
 use surrealdb::sql::Thing;
 pub const USER_TABLE: &str = "sys_user";
-#[derive(Debug, Deserialize, Serialize, ToSchema)]
+#[derive(Debug, Deserialize, Serialize, ToSchema, Default)]
 pub struct SysUser {
     pub id: Option<MyThing>,
     pub first_name: String,

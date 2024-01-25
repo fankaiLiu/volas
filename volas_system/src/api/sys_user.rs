@@ -1,4 +1,5 @@
 use crate::services::sys_user_service::UserService;
+use common::app_response::{AppResponse, AppResult};
 use common::{app_response::ResponseBuilder, Routers};
 use salvo::Writer;
 use salvo::{
@@ -7,10 +8,12 @@ use salvo::{
     Response, Router,
 };
 #[endpoint]
-async fn add_user(req: JsonBody<crate::models::sys_user::SysUser>, res: &mut Response) {
+async fn add_user(
+    req: JsonBody<crate::models::sys_user::SysUser>,
+) -> AppResult<crate::models::sys_user::SysUser> {
     let user_service = crate::services::sys_user_service_impl::MyUserService::default();
     let res = user_service.add(&req.0).await.unwrap();
-    todo!()
+    Ok(res)
 }
 
 pub struct SystemUser;
