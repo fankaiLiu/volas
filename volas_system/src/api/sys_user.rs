@@ -10,10 +10,10 @@ use salvo::{
 #[endpoint]
 async fn add_user(
     req: JsonBody<crate::models::sys_user::SysUser>,
-) -> AppResult<crate::models::sys_user::SysUser> {
+) -> AppResult<AppResponse<crate::models::sys_user::SysUser>> {
     let user_service = crate::services::sys_user_service_impl::MyUserService::default();
-    let res = user_service.add(&req.0).await.unwrap();
-    Ok(res)
+    let res = user_service.add(&req.0).await;
+    Ok(AppResponse(res))
 }
 
 pub struct SystemUser;
