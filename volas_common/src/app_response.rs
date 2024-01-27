@@ -80,6 +80,7 @@ impl ErrorResponseBuilder {
             AppError::AnyHow(e) => (500, e.to_string()),
             AppError::Parse(e) => (400, e.to_string()),
             AppError::External(e) => (500, e.to_string()),
+            AppError::Surrealdb(e) => (500, e.to_string()),
         };
         Self {
             code,
@@ -100,6 +101,7 @@ impl ErrorResponseBuilder {
             AppError::AnyHow(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Parse(_) => StatusCode::BAD_REQUEST,
             AppError::External(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::Surrealdb(_) => StatusCode::INTERNAL_SERVER_ERROR,
         };
         res.stuff(status_code, Json(self));
     }

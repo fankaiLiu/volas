@@ -9,10 +9,19 @@ use salvo::{
 };
 #[endpoint]
 async fn add_user(
-    req: JsonBody<crate::models::sys_user::SysUser>,
-) -> AppResult<AppResponse<crate::models::sys_user::SysUser>> {
+    req: JsonBody<crate::models::sys_user::NewUser>,
+) -> AppResult<AppResponse<crate::models::sys_user::UserInfo>> {
     let user_service = crate::services::sys_user_service_impl::MyUserService::default();
     let res = user_service.add(&req.0).await;
+    Ok(AppResponse(res))
+}
+
+#[endpoint]
+async fn login(
+    req: JsonBody<crate::models::sys_user::LoginUser>,
+) -> AppResult<AppResponse<crate::models::sys_user::UserInfo>> {
+    let user_service = crate::services::sys_user_service_impl::MyUserService::default();
+    let res = user_service.login(&req.0).await;
     Ok(AppResponse(res))
 }
 
@@ -20,6 +29,11 @@ pub struct SystemUser;
 
 impl Routers for SystemUser {
     fn build(self) -> Vec<salvo::Router> {
-        vec![Router::new().post(add_user).options(handler::empty())]
+        vec![
+            Router::new().post(add_user).options(handler::empty()),
+            Router::with_path("login")
+                .post(login)
+                .options(handler::empty()),
+        ]
     }
 }

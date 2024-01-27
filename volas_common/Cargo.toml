@@ -12,3 +12,4 @@ thiserror = { workspace = true }
 anyhow = { workspace = true }
 salvo = { workspace = true }
 serde ={workspace = true}
+surrealdb = {workspace=true}

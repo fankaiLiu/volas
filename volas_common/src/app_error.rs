@@ -4,6 +4,8 @@ use thiserror::Error;
 pub enum AppError {
     #[error("error:`{0}`")]
     AnyHow(#[from] anyhow::Error),
+    #[error("surrealdb:`{0}`")]
+    Surrealdb(#[from] surrealdb::Error),
     #[error("http::ParseError:`{0}`")]
     Parse(#[from] salvo::http::ParseError),
     #[error("external error: `{0}`")]

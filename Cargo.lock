@@ -4315,6 +4315,7 @@ dependencies = [
  "anyhow",
  "salvo",
  "serde",
+ "surrealdb",
  "thiserror",
 ]
 

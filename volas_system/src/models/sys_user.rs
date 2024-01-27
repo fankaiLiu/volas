@@ -4,33 +4,44 @@ use salvo::oapi::{Object, Schema, ToSchema};
 use serde::{Deserialize, Serialize};
 use surrealdb::sql::Thing;
 pub const USER_TABLE: &str = "sys_user";
-#[derive(Debug, Deserialize, Serialize, ToSchema, Default)]
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct SysUser {
-    pub id: Option<MyThing>,
+    pub id: surrealdb::sql::Thing,
     pub first_name: String,
     pub last_name: String,
     pub email: String,
     pub password: String,
 }
-#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize, Deserialize, Hash)]
-struct MyThing(surrealdb::sql::Thing);
 
-impl ToSchema for MyThing {
-    fn to_schema(
-        _components: &mut salvo::oapi::Components,
-    ) -> salvo::oapi::RefOr<salvo::oapi::schema::Schema> {
-        Schema::Object(Object::default()).into()
+impl From<SysUser> for UserInfo {
+    fn from(value: SysUser) -> Self {
+        Self {
+            id: value.id.id.to_string(),
+            first_name: value.first_name,
+            last_name: value.last_name,
+            email: value.email,
+        }
     }
 }
-
-impl From<surrealdb::sql::Thing> for MyThing {
-    fn from(thing: surrealdb::sql::Thing) -> Self {
-        MyThing(thing)
-    }
+#[derive(Debug, Deserialize, Serialize, ToSchema, Default)]
+pub struct UserInfo {
+    pub id: String,
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
 }
 
-impl Into<surrealdb::sql::Thing> for MyThing {
-    fn into(self) -> surrealdb::sql::Thing {
-        self.0
-    }
+#[derive(Debug, Deserialize, Serialize, ToSchema, Default)]
+pub struct NewUser {
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, ToSchema, Default)]
+pub struct LoginUser {
+    pub email: String,
+    pub password: String,
 }
