@@ -15,3 +15,4 @@ salvo = { workspace = true }
 anyhow = { workspace = true }
 serde = { workspace = true }
 surrealdb = {workspace=true}
+chrono = {workspace=true}

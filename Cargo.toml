@@ -45,3 +45,4 @@ sysinfo = "0.29.11"
 surrealdb = "1.0.2"
 surrealdb-migrator = {version ="0.1.7",features = ["from-directory"]}
 include_dir = "0.7.3"
+chrono = "0.4.33"

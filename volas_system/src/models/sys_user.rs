@@ -1,5 +1,6 @@
 use std::default;
 
+use chrono::{DateTime, Local, Utc};
 use salvo::oapi::{Object, Schema, ToSchema};
 use serde::{Deserialize, Serialize};
 use surrealdb::sql::Thing;
@@ -12,6 +13,8 @@ pub struct SysUser {
     pub last_name: String,
     pub email: String,
     pub password: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl From<SysUser> for UserInfo {
@@ -21,6 +24,8 @@ impl From<SysUser> for UserInfo {
             first_name: value.first_name,
             last_name: value.last_name,
             email: value.email,
+            created_at: value.created_at.with_timezone(&Local),
+            updated_at: value.updated_at.with_timezone(&Local),
         }
     }
 }
@@ -30,6 +35,8 @@ pub struct UserInfo {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
+    pub created_at: DateTime<Local>,
+    pub updated_at: DateTime<Local>,
 }
 
 #[derive(Debug, Deserialize, Serialize, ToSchema, Default)]

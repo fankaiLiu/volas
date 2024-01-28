@@ -39,8 +39,6 @@ impl UserService for MyUserService {
             .await?;
         //dbg!(&result);
         let created: Option<crate::models::sys_user::SysUser> = result.take(0)?;
-        dbg!(&created);
-        //todo!()
         Ok(created.unwrap().into())
     }
 
