@@ -1,7 +1,7 @@
 use crate::models::sys_user::USER_TABLE;
 
 use super::sys_user_service::UserService;
-use common::AppError;
+use common::{middleware::jwt::get_token, AppError};
 use infra::{DbService, SurrealdbServiceImpl};
 use serde::Deserialize;
 use surrealdb::sql::Thing;
@@ -63,7 +63,9 @@ impl UserService for MyUserService {
                     .bind(("email", &login_user.email))
                     .await?;
                 let created: Option<crate::models::sys_user::SysUser> = result.take(0)?;
-                Ok(created.unwrap().into())
+                let user= created.unwrap();
+                //let token=get_token(user.email,user.id.id.to_string())?;
+                Ok(user.into())
             }
             _ => {
                 return Err(AppError::AnyHow(anyhow::anyhow!("password is invalid")))

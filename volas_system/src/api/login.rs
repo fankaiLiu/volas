@@ -1,3 +1,4 @@
+
 use crate::services::sys_user_service::UserService;
 use common::app_response::{AppResponse, AppResult};
 use common::{app_response::ResponseBuilder, Routers};
@@ -8,21 +9,23 @@ use salvo::{
     Response, Router,
 };
 #[endpoint]
-async fn add_user(
-    req: JsonBody<crate::models::sys_user::NewUser>,
+async fn login(
+    req: JsonBody<crate::models::sys_user::LoginUser>,
 ) -> AppResult<AppResponse<crate::models::sys_user::UserInfo>> {
     let user_service = crate::services::sys_user_service_impl::MyUserService::default();
-    let res = user_service.add(&req.0).await;
+    let res = user_service.login(&req.0).await;
     Ok(AppResponse(res))
 }
 
 
-pub struct SystemUser;
+pub struct Login;
 
-impl Routers for SystemUser {
+impl Routers for Login {
     fn build(self) -> Vec<salvo::Router> {
         vec![
-            Router::new().post(add_user).options(handler::empty()),
+            Router::with_path("login").path("account")
+                .post(login)
+                .options(handler::empty()),
         ]
     }
 }

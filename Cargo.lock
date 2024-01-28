@@ -4313,10 +4313,13 @@ name = "volas_common"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "chrono",
+ "jsonwebtoken",
  "salvo",
  "serde",
  "surrealdb",
  "thiserror",
+ "volas_configs",
 ]
 
 [[package]]

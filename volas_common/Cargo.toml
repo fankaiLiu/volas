@@ -8,8 +8,12 @@ description.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+configs = { package = "volas_configs", path = "../volas_configs" }
+
+chrono = {workspace=true}
 thiserror = { workspace = true }
 anyhow = { workspace = true }
 salvo = { workspace = true }
 serde ={workspace = true}
 surrealdb = {workspace=true}
+jsonwebtoken={workspace=true}

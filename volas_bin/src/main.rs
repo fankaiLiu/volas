@@ -4,7 +4,7 @@ use infra::{DbService, SurrealdbServiceImpl};
 use migrations::MigrationService;
 use salvo::{
     conn::TcpListener,
-    cors::{self, AllowHeaders, AllowMethods, Cors},
+    cors::{self, AllowHeaders, AllowMethods, Any, Cors},
     server::ServerHandle,
     Listener, Router, Server, Service,
 };
@@ -21,9 +21,11 @@ async fn main() {
         .allow_origin(cors::Any)
         .allow_methods(AllowMethods::any())
         .allow_headers(AllowHeaders::any())
+        .expose_headers(Any)
         .into_handler();
 
     let service: Service = Router::with_hoop(cors_handler)
+        .path("api")
         .append(&mut System.build())
         .into();
     println!("Starting server at {}", &config.server.address);
