@@ -1,5 +1,3 @@
-use crate::models::sys_user::USER_TABLE;
-
 use super::sys_user_service::UserService;
 use common::{middleware::jwt::get_token, AppError};
 use infra::{DbService, SurrealdbServiceImpl};
@@ -24,16 +22,14 @@ impl UserService for MyUserService {
         let sql = "
             CREATE sys_user CONTENT
             {
-                first_name: $first_name,
-                last_name: $last_name,
+                username: $username,
                 email: $email,
                 password: crypto::argon2::generate($password),
             }
             ";
         let mut result = db
             .query(sql)
-            .bind(("first_name", &new_user.first_name))
-            .bind(("last_name", &new_user.last_name))
+            .bind(("username", &new_user.username))
             .bind(("email", &new_user.email))
             .bind(("password", &new_user.password))
             .await?;
@@ -48,19 +44,19 @@ impl UserService for MyUserService {
     ) -> common::app_response::AppResult<crate::models::sys_user::UserInfo> {
         let db: &surrealdb::Surreal<surrealdb::engine::remote::ws::Client> =
             SurrealdbServiceImpl::pool().await.unwrap();
-        let sql = format!("return crypto::argon2::compare((select password from sys_user where email= $email)[0].password,$password)");
+        let sql = format!("return crypto::argon2::compare((select password from sys_user where username= $username)[0].password,$password)");
         let mut result = db
             .query(&sql)
-            .bind(("email", &login_user.email))
+            .bind(("username", &login_user.username))
             .bind(("password", &login_user.password))
             .await?;
         let created: Option<bool> = result.take(0)?;
         match created {
             Some(true) => {
-                let sql = format!("select * from sys_user where email= $email");
+                let sql = format!("select * from sys_user where username= $username");
                 let mut result = db
                     .query(&sql)
-                    .bind(("email", &login_user.email))
+                    .bind(("username", &login_user.username))
                     .await?;
                 let created: Option<crate::models::sys_user::SysUser> = result.take(0)?;
                 let user= created.unwrap();
