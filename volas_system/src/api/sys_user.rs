@@ -16,13 +16,10 @@ async fn add_user(
     Ok(AppResponse(res))
 }
 
-
 pub struct SystemUser;
 
 impl Routers for SystemUser {
     fn build(self) -> Vec<salvo::Router> {
-        vec![
-            Router::new().post(add_user).options(handler::empty()),
-        ]
+        vec![Router::new().post(add_user).options(handler::empty())]
     }
 }

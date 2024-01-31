@@ -1,8 +1,8 @@
 use common::Routers;
 use salvo::Router;
+pub mod login;
 pub mod sys_user;
 pub mod system_info;
-pub mod login;
 pub struct System;
 
 impl Routers for System {

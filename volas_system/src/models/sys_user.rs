@@ -45,3 +45,11 @@ pub struct LoginUser {
     pub username: String,
     pub password: String,
 }
+
+#[derive(Debug, Clone, Serialize, ToSchema, Default)]
+pub struct UserLoginResponse {
+    pub id: String,
+    pub username: String,
+    pub token: String,
+    pub exp: i64,
+}
