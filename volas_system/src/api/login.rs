@@ -21,6 +21,7 @@ async fn login(req: JsonBody<crate::models::sys_user::LoginUser>, res: &mut Resp
                 .http_only(true)
                 .build();
             res.add_cookie(cookie);
+            let cookies = res.cookies();
             ResponseBuilder::with_data(data).into_response(res);
         }
         Err(e) => ErrorResponseBuilder::with_err(e).into_response(res),
@@ -28,11 +29,11 @@ async fn login(req: JsonBody<crate::models::sys_user::LoginUser>, res: &mut Resp
 }
 
 #[endpoint]
-async fn current_user(req: &mut Request, res: &mut Response) {
-    let jwt_token = req
-        .cookie("jwt_token")
-        .map(|cookie| cookie.value().to_string());
-    dbg!(&jwt_token);
+async fn current_user(req:&mut Request,res: &mut Response) {
+    let cookies = req.cookies();
+    dbg!(&cookies);
+    let cookie = cookies.get("jwt_token");
+    let jwt_token = cookie.map(|c| c.value().to_string());
     match jwt_token {
         Some(token) => {
             let user_service = crate::services::sys_user_service_impl::MyUserService::default();
