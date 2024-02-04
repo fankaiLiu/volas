@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct JwtClaims {
     username: String,
-    user_id: String,
+    pub user_id: String,
     exp: i64,
 }
 
@@ -25,7 +25,7 @@ pub fn jwt_middleware() -> JwtAuth<JwtClaims, ConstDecoder> {
         Box::new(QueryFinder::new("token")),
         Box::new(CookieFinder::new("jwt_token")),
     ])
-    .force_passed(false);
+    .force_passed(true);
     auth_handler
 }
 

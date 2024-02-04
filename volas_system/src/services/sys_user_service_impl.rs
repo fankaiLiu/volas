@@ -75,11 +75,11 @@ impl UserService for MyUserService {
         }
     }
 
-    async fn current_user(&self, token: String) -> common::app_response::AppResult<UserInfo> {
+    async fn current_user(&self, id: String) -> common::app_response::AppResult<UserInfo> {
         let db: &surrealdb::Surreal<surrealdb::engine::remote::ws::Client> =
             SurrealdbServiceImpl::pool().await.unwrap();
-        let sql = format!("select * from sys_user where id= $id");
-        let mut result = db.query(&sql).bind(("id", &token)).await?;
+        let sql = format!("select * from sys_user where id= 'sys_user:$id'");
+        let mut result = db.query(&sql).bind(("id", id)).await?;
         let created: Option<crate::models::sys_user::SysUser> = result.take(0)?;
         Ok(created.unwrap().into())
     }
