@@ -1,4 +1,4 @@
-use crate::models::sys_user::{UserInfo, UserLoginResponse};
+use crate::models::sys_user::{SysUser, UserInfo, UserLoginResponse};
 
 use super::sys_user_service::UserService;
 use common::{middleware::jwt::get_token, AppError};
@@ -78,9 +78,7 @@ impl UserService for MyUserService {
     async fn current_user(&self, id: String) -> common::app_response::AppResult<UserInfo> {
         let db: &surrealdb::Surreal<surrealdb::engine::remote::ws::Client> =
             SurrealdbServiceImpl::pool().await.unwrap();
-        let sql = format!("select * from sys_user where id= 'sys_user:$id'");
-        let mut result = db.query(&sql).bind(("id", id)).await?;
-        let created: Option<crate::models::sys_user::SysUser> = result.take(0)?;
-        Ok(created.unwrap().into())
+        let result:Option<SysUser> = db.select(("sys_user", id)).await?;
+        Ok(result.unwrap().into())
     }
 }

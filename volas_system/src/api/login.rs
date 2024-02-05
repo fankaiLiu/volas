@@ -33,7 +33,6 @@ async fn login(req: JsonBody<crate::models::sys_user::LoginUser>, res: &mut Resp
 #[endpoint]
 async fn current_user(req: &mut Request, res: &mut Response, depot: &mut Depot) {
     let jwt: Option<&TokenData<JwtClaims>> = depot.jwt_auth_data();
-    dbg!(&jwt);
     match jwt {
         Some(token) => {
             let user_service = crate::services::sys_user_service_impl::MyUserService::default();
