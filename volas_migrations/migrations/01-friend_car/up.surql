@@ -9,4 +9,6 @@ DEFINE FIELD email ON TABLE sys_user TYPE string
   VALUE string::lowercase($value)
   ASSERT string::is::email($value);
 DEFINE INDEX userEmailIndex ON TABLE sys_user COLUMNS email UNIQUE;
-DEFINE FIELD password ON TABLE sys_user TYPE string
+DEFINE FIELD password ON TABLE sys_user TYPE string;
+DEFINE FIELD created_by ON TABLE sys_user TYPE option<record<sys_user>>;
+DEFINE FIELD updated_by ON TABLE sys_user TYPE option<record<sys_user>>;

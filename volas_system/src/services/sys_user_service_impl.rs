@@ -27,6 +27,7 @@ impl UserService for MyUserService {
                 username: $username,
                 email: $email,
                 password: crypto::argon2::generate($password),
+                created_by:type::thing('sys_user', $created_by),
             }
             ";
         let mut result = db
@@ -34,6 +35,7 @@ impl UserService for MyUserService {
             .bind(("username", &new_user.username))
             .bind(("email", &new_user.email))
             .bind(("password", &new_user.password))
+            .bind(("created_by",&new_user.created_by))
             .await?;
         //dbg!(&result);
         let created: Option<crate::models::sys_user::SysUser> = result.take(0)?;

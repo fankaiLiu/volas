@@ -39,6 +39,7 @@ async fn current_user(req: &mut Request, res: &mut Response, depot: &mut Depot) 
             let result = user_service
                 .current_user(token.claims.user_id.clone())
                 .await;
+            dbg!(&result);
             match result {
                 Ok(data) => ResponseBuilder::with_data(data).into_response(res),
                 Err(e) => ErrorResponseBuilder::with_err(e).into_response(res),

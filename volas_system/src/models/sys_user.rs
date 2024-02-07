@@ -38,6 +38,7 @@ pub struct NewUser {
     pub username: String,
     pub email: String,
     pub password: String,
+    pub created_by:Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize, ToSchema, Default)]
